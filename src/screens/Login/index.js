@@ -7,11 +7,15 @@ import {
   SafeAreaView,
   TextInput,
   ScrollView,
+  Platform,
 } from "react-native";
 import theme from "../../../theme";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Device from "expo-device";
+
+const hardwareId = Platform === "ios" ? Device.modelId : Device.osBuildId;
 export default class Login extends React.Component {
   constructor() {
     super();
@@ -36,12 +40,7 @@ export default class Login extends React.Component {
     let { email, password, phone } = this.state;
     if (email === "") {
       showMessage({
-        message: "Enter email address",
-        type: "danger",
-      });
-    } else if (password === "") {
-      showMessage({
-        message: "Enter new password",
+        message: "Please enter correct phone number",
         type: "danger",
       });
     } else {
@@ -49,10 +48,8 @@ export default class Login extends React.Component {
         .post(
           `https://test.cekuregistracija.lv/ws/login`,
           {
-            // username: email,
-            // password: password,
-            userName: "291534180",
-            password: "dasdada",
+            userName: email,
+            password: hardwareId,
           },
           {
             headers: {
@@ -88,20 +85,20 @@ export default class Login extends React.Component {
             {/* <Text style={styles._error}>{err}</Text> */}
             <TextInput
               onChangeText={(email) => this.setState({ email })}
-              placeholder="Email"
+              placeholder="Email Address"
               style={styles._text_input}
               placeholderTextColor={theme.greyLight}
               value={email}
             />
 
-            <TextInput
+            {/* <TextInput
               onChangeText={(password) => this.setState({ password })}
               style={styles._text_input}
               placeholderTextColor={theme.greyLight}
               value={password}
               placeholder="Password"
               secureTextEntry
-            />
+            /> */}
             <TouchableOpacity style={styles._btn} onPress={() => this.Login()}>
               <Text style={styles._btn_text}>LOGIN</Text>
             </TouchableOpacity>

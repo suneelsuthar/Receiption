@@ -46,29 +46,53 @@ export default class AddReceipt extends React.Component {
         name: `avatar.${fileType}`,
         type: `image/${fileType}`,
       });
-      console.log(formData)
-      let axiosConfig = {
+      console.log(formData);
+
+      const file = {
+        uri,
+        name: `avatar.${fileType}`,
+        type: `image/${fileType}`,
+      };
+
+      const body = new FormData();
+      body.append("file", file);
+
+      fetch("https://test.cekuregistracija.lv/ws/analyse/", {
+        method: "POST",
+        body,
         headers: {
-          //method:'post',
-          //Accept: "application/json",
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
-      };
-
-      await axios
-        .post(
-          "https://test.cekuregistracija.lv/ws/analyse",
-          formData,
-          axiosConfig
-        )
-
+      })
         .then(function (response) {
           console.log("---res---->", response);
         })
         .catch(function (error) {
-          console.log("--err--->", error.response.data);
+          console.log("--err--->", error);
         });
+      // let axiosConfig = {
+      //   headers: {
+      //     //method:'post',
+      // //Accept: "application/json",
+      // "Content-Type": "multipart/form-data",
+      // Authorization: `Bearer ${token}`,
+      //   },
+      // };
+
+      // await axios
+      //   .post(
+      //     "https://test.cekuregistracija.lv/ws/analyse",
+      //     formData,
+      //     axiosConfig
+      //   )
+
+      // .then(function (response) {
+      //   console.log("---res---->", response);
+      // })
+      // .catch(function (error) {
+      //   console.log("--err--->", error.response.data);
+      // });
     }
   };
 

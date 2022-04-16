@@ -7,15 +7,16 @@ import {
   SafeAreaView,
   TextInput,
   ScrollView,
+  Platform,
 } from "react-native";
 import theme from "../../../theme";
 import URL from "./../../../config";
 import axios from "axios";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import * as Device from 'expo-device';
+import * as Device from "expo-device";
 
-console.log(Device.osBuildId);
-
+const hardwareId = Platform === "ios" ? Device.modelId : Device.osBuildId;
+console.log(hardwareId);
 export default class Signup extends React.Component {
   constructor() {
     super();
@@ -38,11 +39,6 @@ export default class Signup extends React.Component {
         message: "Enter email address",
         type: "danger",
       });
-    } else if (password === "") {
-      showMessage({
-        message: "Enter new password",
-        type: "danger",
-      });
     } else {
       await axios
         .post(
@@ -50,7 +46,7 @@ export default class Signup extends React.Component {
           {
             userName: email,
             userEmail: email,
-            password: password,
+            password: hardwareId,
           },
           {
             headers: {
@@ -99,14 +95,7 @@ export default class Signup extends React.Component {
               placeholderTextColor={theme.greyLight}
               value={email}
             />
-            <TextInput
-              onChangeText={(password) => this.setState({ password })}
-              placeholder="Password"
-              style={styles._text_input}
-              placeholderTextColor={theme.greyLight}
-              value={password}
-              secureTextEntry
-            />
+
             <TouchableOpacity
               style={styles._btn}
               onPress={() => this.CreateAccount()}
